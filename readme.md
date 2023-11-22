@@ -18,24 +18,20 @@ Les bibliothécaires aimeraient être en mesure de sauvegarder des nouveaux livr
 
 ## Solution
 
-Créer et sauvegarder dans la base de données un identifiant (nom d'utilisateur + mot de passe) pour chaque bibliothécaire.
+### Backend
 
-Créer un formulaire dans le front-end qui exigéra au bibliothécaire de rentrer ces identifiants. Ce formulaire enverra une requête HTTPS vers le serveur express dans le backend.
+Créer et sauvegarder dans la base de données un identifiant avec nom d'utilisateur unique et mot de passe pour chaque bibliothécaire.
 
-Implementer un chemin (route) dans le serveur express qui sera utilisé pour valider les identifiants dans le backend avec la base de données avant de permettre au bibliothécaire d'ajouter un nouveau livre dans le système. Le serveur renverra une réponse au front-end qui dependra de la validité des identifiants reçus.
+Implémentez le point de terminaison qui sera utilisé pour authentifier le bibliothécaire avant qu'il soit en mesure d'ajouter un nouveau livre. Ce point de terminaison vérifiera d'abord que le nom d'utilisateur reçu dans le corps de la requête existe dans la base de données. S'il existe, il vérifiera ensuite que le mot de passe reçu dans le corps de la requête correspond à celui enregistré pour le bibliothécaire dans la base de données. Si les mots de passe sont identiques, le point de terminaison renverra une réponse de succès. Si les mots de passe ne correspondent pas, le point de terminaison renverra un message d'erreur. Si le nom d'utilisateur reçu dans le corps de la requête n'existe pas, le point de terminaison renverra un message d'erreur au bibliothécaire.
+
+Implémentez le point de terminaison qui sera utilisé pour sauvegarder les informations d'un livre dans la base de données. Ce point de terminaison vérifiera d'abord que le code ISBN reçu dans le corps de la requête n'existe pas déjà dans la base de données. S'il existe, il renverra un message indiquant à l'utilisateur que l'ISBN existe déjà et que la base de données ne peut pas contenir de données en double. Si le code ISBN n'existe pas dans la base de données, un nouveau document contenant les informations du livre sera créé et enregistré dans la base de données, puis le point de terminaison renverra une réponse de succès.
+
+### Frontend
+
+Implémentez un formulaire qui sera utilisé par le bibliothécaire pour se connecter avec ses identifiants. Ce formulaire enverra une requête au serveur pour authentifier le bibliothécaire. Si le serveur répond avec un message de succès, le bibliothécaire sera redirigé vers la page protégée uniquement accessible par les bibliothécaires authentifiés, afin qu'ils puissent ajouter un nouveau livre.
 
 Dans le cas d'une réponse négative, le bibliothécaire aura 2 autres essais avant que son compte soit verrouillé et requiert l'intervention d'un administrateur du système qui va créer un nouveau mot de passe pour le bibliothécaire.
 
-Dans le cas d'une réponse positive, le bibliothécaire sera redirigé vers une nouvelle page dans le front-end qui va lui demander la date de publication du livre.
+Implémentez un formulaire à plusieurs étapes qui, tout d'abord, demandera à l'utilisateur de valider si le livre a été publié avant 1972 ou non. Si le livre a été publié avant 1972, l'utilisateur sera invité à saisir des informations sur le livre telles que le titre, l'auteur, le genre, etc. Étant donné que le livre a été publié avant 1972, le champ du titre de ce formulaire sera obligatoire, et la validation du formulaire sera effectuée côté client avant l'envoi d'une requête HTTP au point de terminaison du serveur responsable de sauvegarder les informations du livre dans la base de données.
 
-Si le livre a été publiée avant 1972, le bibliothécaire sera redirigé vers le formulaire dans lequel il pourra rentrer le titre du livre et les autres informations concernant le livre puis soumettre le formulaire. La soumission du formulaire dans le frontend enverra une requête HTTPS au serveur express dans le backend qui va créer un nouveau document dans la base de données MongoDB contenant toutes les informations du livre ajouté.
-
-Note: Le formulaire dans le frontend ne pourra pas être soumis s'il manque le titre du livre donc il va falloir implementer un mecanisme de vérification dans le frontend afin de s'assurer de ne pas ajouter un livre sans titre.
-
-Si le livre n'a pas été publié avant 1972, le bibliothécaire sera redirigé vers un formulaire dans le frontend qui va lui demander de rentrer le code ISBN du livre puis faire une demande de vérification du code ISBN. Cette vérification sera effectuée dans le frontend.
-
-Si le code n'est pas valide, le bibliothécaire devra rentrer un nouveau code ISBN ou corriger celui qui avait été entré dans le formulaire.
-
-Si le code ISBN est valide, le bibliothécaire sera redirigé vers un formulaire dans lequel il va rentrer les autres informations concernant le livre puis soumettre le formulaire. La soumission du formulaire dans le frontend enverra une requête HTTPS au serveur express dans le backend qui va créer un nouveau document dans la base de données MongoDB contenant toutes les informations du livre ajouté.
-
-Note: Si le code ISBN est valide, ce dernier doit être conservé et pre-remplis pour le bibliothécaire dans le formulaire qui sera soumis au serveur express dans le backend.
+Si le livre n'a pas été publié avant 1972, l'utilisateur sera invité à saisir et valider le code ISBN. Ce code sera validé côté client. Si le code est valide, l'utilisateur sera ensuite invité à saisir des informations sur le livre telles que le titre, l'auteur, le genre, etc., puis à envoyer une requête HTTP au point de terminaison du serveur responsable de sauvegarder les informations du livre dans la base de données. Si le code ISBN n'est pas valide, l'utilisateur sera invité à fournir un code ISBN valide.
