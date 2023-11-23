@@ -44,4 +44,4 @@ Si le livre n'a pas été publié avant 1972, l'utilisateur sera invité à sais
 
 ## Diagramme de séquence
 
-![My Image]()
+![My Image](sequencecase.png)
