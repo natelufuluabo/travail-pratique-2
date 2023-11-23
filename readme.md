@@ -40,4 +40,8 @@ Si le livre n'a pas été publié avant 1972, l'utilisateur sera invité à sais
 
 ## Diagramme d'utilisation
 
-![My Image](usecasediagram.png)
+![My Image](usecase.png)
+
+## Diagramme de séquence
+
+![My Image]()
