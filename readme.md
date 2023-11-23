@@ -35,3 +35,9 @@ Dans le cas d'une réponse négative, le bibliothécaire aura 2 autres essais av
 Implémentez un formulaire à plusieurs étapes qui, tout d'abord, demandera à l'utilisateur de valider si le livre a été publié avant 1972 ou non. Si le livre a été publié avant 1972, l'utilisateur sera invité à saisir des informations sur le livre telles que le titre, l'auteur, le genre, etc. Étant donné que le livre a été publié avant 1972, le champ du titre de ce formulaire sera obligatoire, et la validation du formulaire sera effectuée côté client avant l'envoi d'une requête HTTP au point de terminaison du serveur responsable de sauvegarder les informations du livre dans la base de données.
 
 Si le livre n'a pas été publié avant 1972, l'utilisateur sera invité à saisir et valider le code ISBN. Ce code sera validé côté client. Si le code est valide, l'utilisateur sera ensuite invité à saisir des informations sur le livre telles que le titre, l'auteur, le genre, etc., puis à envoyer une requête HTTP au point de terminaison du serveur responsable de sauvegarder les informations du livre dans la base de données. Si le code ISBN n'est pas valide, l'utilisateur sera invité à fournir un code ISBN valide.
+
+# Diagrammes
+
+## Diagramme d'utilisation
+
+![My Image](usecasediagram.png)
